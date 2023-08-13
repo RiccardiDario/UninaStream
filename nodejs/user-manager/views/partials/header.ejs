@@ -1,0 +1,41 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      UninaStream
+      <img src="/static/logo.png" class="ms-2 align-top" alt="Logo" height="30">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <% if (session['keycloak-token']) { %>
+          <% if (content.realm_access.roles.includes('video-manager')) { %>
+            <li class="nav-item mx-2">
+              <a class="nav-link active" href="/media/add-video">Aggiungi Video</a>
+            </li>
+            <li class="nav-item mx-2">
+              <a class="nav-link active" href="/media/edit-video">Modifica Video</a>
+            </li>
+          <% }%>
+          <% if (content.realm_access.roles.includes('user')) { %>
+            <li class="nav-item mx-2">
+              <a class="nav-link active" aria-current="page" href="/ricerca">Ricerca</a>
+            </li>
+            <li class="nav-item mx-2">
+              <a class="nav-link active" aria-current="page" href="/catalogo">I miei video</a>
+            </li>
+          <% }%>
+          <li class="nav-item mx-2">
+            <a class="nav-link active" href="/logout"><strong><%= content.given_name %></strong> - Logout</a>
+          </li>
+        <% } else { %>
+          <li class="nav-item mx-2">
+            <a class="nav-link active" href="/login">Login</a>
+          </li>
+        <% }%>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

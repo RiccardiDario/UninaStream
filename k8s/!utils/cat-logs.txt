@@ -1,0 +1,10 @@
+kubectl exec --stdin --tty user-manager-deployment-8b87f4756-kpq29 -- cat /user-manager/logs/user_manager.log | grep 'WARN\|ERROR\|FATAL' > \!utils/user-manager-logs.txt
+
+kubectl exec --stdin --tty video-manager-deployment-7774f7b879-snp65 -- cat /video-manager/logs/video_manager.log | grep 'WARN\|ERROR\|FATAL' > \!utils/video-manager-logs.txt
+
+kubectl exec --stdin --tty vault-deployment-757c9b9d5d-66q6m -- cat /vault/logs/log.log > \!utils/vault-logs.txt
+
+kubectl logs ingress-nginx-controller-d97747455-hsg5x -n ingress-nginx > \!utils/nginx-logs.txt
+
+
+kubectl cp video-manager-deployment-7774f7b879-snp65:/video-manager/media/videos /videos

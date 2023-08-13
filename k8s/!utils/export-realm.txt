@@ -1,0 +1,2 @@
+kubectl exec --stdin --tty keycloak-deployment-bf8bff789-dbv8c -- /opt/keycloak/bin/kc.sh export --file /opt/keycloak/bin/realm.json --realm uninastream
+kubectl exec --stdin --tty keycloak-deployment-bf8bff789-dbv8c -- cat /opt/keycloak/bin/realm.json > \!utils/realm.json

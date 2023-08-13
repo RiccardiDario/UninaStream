@@ -1,0 +1,33 @@
+   0 vault login
+   1 vault write auth/approle/role/user-manager \
+   2     token_ttl=1h \
+   3     token_max_ttl=4h \
+   4     token_policies=user-manager
+   5 vault write auth/approle/role/video-manager \
+   6     token_ttl=1h \
+   7     token_max_ttl=4h \
+   8     token_policies=video-manager
+   9 vault read auth/approle/role/user-manager/role-id
+  10 vault write -f auth/approle/role/user-manager/secret-id
+  11 vault read auth/approle/role/video-manager/role-id
+  12 vault write -f auth/approle/role/video-manager/secret-id
+  13 vault kv put uninastream/shared KC_BASEURL="http://www.auth.uninastream.it/" KC_REALM="uninastream" KC_CLIENT_BASE_ID="uninastream_client"
+  14 vault kv put uninastream/user-manager SESSION_SECRET="C7^9jb&5FtTMbykbBnjoHZgdD2M&P?"
+  15 vault kv put uninastream/video-manager KC_CLIENT_ADMIN_ID="moderatore" KC_CLIENT_ADMIN_PASSWORD="jSPCpOeFusgc2HZi1I8fxs9pemuflDbr" SESSION_SECRET="bUhfP&hN$D@D?Cbv6qv&wsHnq5gf67"
+
+
+
+  //creazione utenti temporanei mongodb 
+
+     0 vault login root
+   1 vault login
+   2 vault secrets enable database
+   3 vault secrets enable mongodbatlas
+   4 vault write database/config/my-mongodbatlas-db plugin_name=mongodbatlas-database-plugin allowed_roles="gestore-utente" public_key="ATLAS_PUB_KEY" private_key="ATLAS_PRIV_KEY" project_id="ATLAS-PROJECT-ID"
+   5 vault write mongodbatlas/config public_key="ATLAS_PUB_KEY" private_key="ATLAS_PRIV_KEY"
+   6 vault write database/config/my-mongodbatlas-db plugin_name=mongodbatlas-database-plugin allowed_roles="gestore-utente" public_key="xctjncir" private_key="8e08661f-629b-434f-be4e-1603815d78f3" project_id="6426bda0e5790a509072e26e"   
+   7 vault write mongodbatlas/config public_key="xctjncir" private_key="8e08661f-629b-434f-be4e-1603815d78f3"
+   8 vault read mongodbatlas/config
+   9 vault secrets enable mongodbatlas
+  10 vault write mongodbatlas/config public_key="xctjncir" private_key="8e08661f-629b-434f-be4e-1603815d78f3"
+  11 history

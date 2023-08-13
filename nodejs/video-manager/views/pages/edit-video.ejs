@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <%- include('../partials/head'); %>
+  <script src="/media/static/select-video.js"></script>
+</head>
+
+<body>
+
+  <header>
+    <%- include('../partials/header'); %>
+  </header>
+
+  <main class="container my-2">
+    <h2 class="text-center my-2">Modifica o Elimina Video</h2>
+    <div class="col-lg-7 col-12 mx-auto">
+      <div class="input-group">
+        <select class="form-select" id="selectVideo">
+          <% videos.forEach(function(video) { %>
+            <option value="<%= video._id %>">
+              <%= video.titolo %>
+            </option>
+            <% }); %>
+        </select>
+      </div>
+      <% if (selectedVideo) { %>
+        <div class="row">
+          <div class="my-2 form-check form-switch d-flex justify-content-center align-items-center">
+            <label class="form-check-label mx-2" for="abbonamentoSwitch">Video presente in abbonamento</label>
+            <input class="form-check-input mx-2" type="checkbox" role="switch" id="abbonamentoSwitch" <% if (selectedVideo.abbonamento) { %>checked<% }%>>
+          </div>
+          <button type="button" class="col-7 mx-auto my-2 btn btn-primary" id="myEdit">Modifica</button>
+          <button type="button" class="col-7 mx-auto my-2 btn btn-danger" id="myDelete">Elimina</button>
+        </div>
+        <script src="/media/static/edit-video.js"></script>
+        <% }%>
+    </div>
+  </main>
+
+  <footer>
+    <%- include('../partials/footer'); %>
+  </footer>
+
+</body>
+
+</html>

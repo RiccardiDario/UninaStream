@@ -1,0 +1,57 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+  annotations: 
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "1m"
+    nginx.ingress.kubernetes.io/keepalive-timeout: "120"
+    nginx.ingress.kubernetes.io/connection-limit: "1000"
+    cert-manager.io/issuer: letsencrypt-production
+spec:
+  tls:
+  - secretName: web-ssl
+    hosts:
+    - uninastream.ddnsfree.com
+    - auth.uninastream.ddnsfree.com
+    - vault.uninastream.ddnsfree.com
+  rules:
+  - host: uninastream.ddnsfree.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: user-manager
+            port:
+              name: http
+      - path: /media
+        pathType: Prefix
+        backend:
+          service:
+            name: video-manager
+            port:
+              name: http
+  - host: vault.uninastream.ddnsfree.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: vault
+            port:
+              name: http
+  - host: auth.uninastream.ddnsfree.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: keycloak
+            port:
+              name: http

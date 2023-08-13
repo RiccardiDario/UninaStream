@@ -1,0 +1,3 @@
+kubectl delete -f ingress-nginx.yaml -f keycloak.yaml -f user-manager.yaml -f vault.yaml -f video-manager.yaml
+kubectl delete -f deploy-nginx.yaml
+kubectl delete -f cert-manager/

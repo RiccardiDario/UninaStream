@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<body>
+
+  <header>
+    <%- include('../partials/header'); %>
+  </header>
+
+  <main class="container my-3">
+    <h1 class="text-center">
+      <%= video.titolo %>
+    </h1>
+    <center>
+      <video class="ratio" controls controlsList="nodownload" src="<%= video.videoPath %>" autoplay></video>
+    </center>
+  </main>
+
+  <footer>
+    <%- include('../partials/footer'); %>
+  </footer>
+
+</body>
+
+</html>

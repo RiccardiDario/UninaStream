@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-manager-config
+data:
+  VAULT_ENDPOINT: 'http://vault'
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: user-manager-secret
+type: Opaque
+data:
+  ROLE_ID: 'MjU5NmY3NDItYjNiZi04ZDU3LTdiNjYtOGJlYjI3ODA4YjNl'
+  SECRET_ID: 'ZjVlN2E1ZTAtZWQyNi0xZWIzLWM0M2MtZTU5Njc2NzQ0ODBl'
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-manager-deployment
+  labels:
+    app: user-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-manager
+  template:
+    metadata:
+      labels:
+        app: user-manager
+    spec:
+      containers:
+      - name: user-manager
+        image: gcr.io/uninastream/user-manager
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        envFrom:
+        - configMapRef:
+            name: user-manager-config
+        - secretRef:
+            name: user-manager-secret
+        resources:
+          limits:
+            cpu: 500m
+            memory: 4Gi
+          requests:
+            cpu: 250m
+            memory: 512Mi
+        volumeMounts:
+        - name: user-manager-logs
+          mountPath: /user-manager/logs
+      volumes:
+      - name: user-manager-logs
+        persistentVolumeClaim:
+          claimName: user-manager-logs-pvc
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-manager
+spec:
+  selector:
+    app: user-manager
+  ports:
+  - name: http
+    port: 80
+    targetPort: 5000

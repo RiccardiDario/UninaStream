@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<body>
+
+  <header>
+    <%- include('../partials/header'); %>
+  </header>
+  
+  <main class="container my-3">
+    <h2 class="text-center my-2">I miei video</h2>
+    <div class="row">
+      <% videos.forEach(function(video) { %>
+        <div class="col my-2 d-flex justify-content-center">
+          <div class="card my-card">
+            <a href="/media/videos/<%= video._id %>.mp4">
+              <img src="<%= video.previewPath %>" class="card-img-top" alt="Preview <%= video.titolo %>">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <%= video.titolo %>
+                </h5>
+                <p class="card-text">
+                  <%= video.descrizione %>
+                </p>
+              </div>
+            </a>
+          </div>
+        </div>
+      <% }); %> 
+    </div>
+  </main>
+
+  <footer>
+    <%- include('../partials/footer'); %>
+  </footer>
+
+</body>
+
+</html>

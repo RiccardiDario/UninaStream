@@ -1,0 +1,12 @@
+# Dockerfile
+Dockerfile
+
+# Environment variables
+.env
+
+# Dependency directories
+node_modules/
+
+# Media files
+media/previews/
+media/videos/

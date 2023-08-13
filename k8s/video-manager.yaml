@@ -1,0 +1,75 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: video-manager-config
+data:
+  VAULT_ENDPOINT: 'http://vault'
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: video-manager-secret
+type: Opaque
+data:
+  ROLE_ID: 'ZmEzMjc3NTctYjhmMC03OWYwLWRiY2EtZDY1ZGEyNjYzOTlj'
+  SECRET_ID: 'ZmNhZGFiMTEtYzU4My0wYTJhLWY3MWYtZjIzNWJjYWY2ZmZi'
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: video-manager-deployment
+  labels:
+    app: video-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: video-manager
+  template:
+    metadata:
+      labels:
+        app: video-manager
+    spec:
+      containers:
+      - name: video-manager
+        image: gcr.io/uninastream/video-manager
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        envFrom:
+        - configMapRef:
+            name: video-manager-config
+        - secretRef:
+            name: video-manager-secret
+        resources:
+          limits:
+            cpu: 500m
+            memory: 4Gi
+          requests:
+            cpu: 250m
+            memory: 512Mi
+        volumeMounts:
+        - name: video-manager-logs
+          mountPath: /video-manager/logs
+        - name: video-manager-media
+          mountPath: /video-manager/media
+      volumes:
+      - name: video-manager-logs
+        persistentVolumeClaim:
+          claimName: video-manager-logs-pvc
+      - name: video-manager-media
+        persistentVolumeClaim:
+          claimName: video-manager-pvc
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: video-manager
+spec:
+  selector:
+    app: video-manager
+  ports:
+  - name: http
+    port: 80
+    targetPort: 5000
